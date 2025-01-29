@@ -15,7 +15,9 @@ export default async ({ schedule }, { services, database, getSchema, env, logger
   const resellers = await response.json()
 
   // https://crontab.guru/
-  schedule('5 4 * * SUN', async () => {
+  // 0 0,3,6,9,12,15,18,21 * * 1-7
+  // 5 4 * * SUN'
+  schedule('30 0,3,6,9,12,15,18,21 * * 1-7', async () => {
     for (const reseller of resellers) {
       try {
         const existingClient = await clientsService.readByQuery({
@@ -40,7 +42,7 @@ export default async ({ schedule }, { services, database, getSchema, env, logger
     }
   })
 
-  schedule('0 2 * * SUN', async () => {
+  schedule('0 0,3,6,9,12,15,18,21 * * 1-7', async () => {
     const resellersFromDB = await clientsService.readByQuery(
       {
         limit: -1,

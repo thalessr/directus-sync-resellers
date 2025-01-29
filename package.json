@@ -1,5 +1,5 @@
 {
-	"name": "sync-resellers",
+	"name": "@thalessr/sync-resellers",
 	"description": "Extension that syncs the resellers from the reseller API to the Directus database",
 	"author": "Directus",
 	"license": "MIT",
