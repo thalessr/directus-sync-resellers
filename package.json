@@ -5,6 +5,10 @@
 	"license": "MIT",
 	"icon": "extension",
 	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/thalessr/directus-sync-resellers.git"
+	},
 	"keywords": [
 		"directus",
 		"directus-extension",
