@@ -24,16 +24,19 @@ export default async ({ schedule }, { services, database, getSchema, env, logger
           filter: { buum_uid: { _eq: reseller.buum_uid } },
           limit: 1
         })
-        const jsonData = JSON.parse(reseller)
-        const { slug, ...rest } = jsonData
 
-        if (existingClient.length > 0) {
-          rest.date_updated = new Date().toISOString()
-          logger.info(`Updating client: ${slug}`)
-          await clientsService.updateOne(slug, rest)
-        } else {
-          logger.info(`Creating client: ${slug}`)
-          await clientsService.createOne({ slug, ...rest })
+        if (reseller) {
+          //       const jsonData = JSON.parse(reseller)
+          const { slug, ...rest } = reseller
+
+          if (existingClient.length > 0) {
+            rest.date_updated = new Date().toISOString()
+            logger.info(`Updating client: ${slug}`)
+            await clientsService.updateOne(slug, rest)
+          } else {
+            logger.info(`Creating client: ${slug}`)
+            await clientsService.createOne({ slug, ...rest })
+          }
         }
       } catch (e) {
         logger.error(`Error processing reseller: ${reseller}`)
@@ -55,15 +58,15 @@ export default async ({ schedule }, { services, database, getSchema, env, logger
         const apiData = await response.json()
         if (!apiData) {
           console.warn(`Archiving: ${reseller.slug}`)
-          reseller.status = 'archived'
+          reseller.status = 'draft'
           reseller.date_updated = new Date().toISOString()
           await clientsService.updateOne(reseller.slug, reseller)
         }
-      // else{
-      //   const { slug, ...rest } = apiData[0]
-      //   rest.date_updated = new Date().toISOString()
-      //   await clientsService.updateOne(slug)
-      // }
+        // else{
+        //   const { slug, ...rest } = apiData[0]
+        //   rest.date_updated = new Date().toISOString()
+        //   await clientsService.updateOne(slug)
+        // }
       } catch (e) {
         logger.error(`Error processing reseller: ${reseller}`)
         logger.error(e)
